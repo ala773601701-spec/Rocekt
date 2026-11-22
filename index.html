@@ -5,262 +5,260 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rocekt Mining</title>
     <script src="https://telegram.org"></script>
+    <script src="https://unpkg.com"></script>
     <style>
+        :root {
+            --bg-main: #090714;
+            --card-bg: #131026;
+            --border-color: rgba(139, 92, 246, 0.25);
+            --text-gray: #94a3b8;
+        }
         body {
-            background: radial-gradient(circle at top, #1e1035 0%, #0a0612 100%);
+            background-color: var(--bg-main);
             color: #ffffff;
             font-family: system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            padding: 12px 14px 85px 14px;
             box-sizing: border-box;
             user-select: none;
         }
-        .header {
+        /* TOP HEADER */
+        .top-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
-        .badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 14px;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .profile-pill {
+            background: #16122b;
+            border: 1px solid var(--border-color);
             border-radius: 20px;
-            font-size: 13px;
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .balance-card {
-            background: rgba(25, 18, 45, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 18px;
-            padding: 18px;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .balance-label {
-            color: #a1a1aa;
-            font-size: 14px;
-            margin-bottom: 6px;
-        }
-        .balance-amount {
-            font-size: 32px;
+        .avatar-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #9333ea);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
+            font-size: 13px;
+        }
+        .icon-pill {
+            background: #16122b;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 6px 10px;
+            font-size: 12px;
+            color: #e2e8f0;
+            cursor: pointer;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* SHARED COSMIC & CARD STYLES */
+        .cosmic-card {
+            background: linear-gradient(135deg, rgba(46, 16, 101, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%),
+                        radial-gradient(circle at top right, #7c3aed, #0f172a);
+            border: 1px solid rgba(168, 85, 247, 0.45);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 25px rgba(109, 40, 217, 0.25);
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+        .btn-purple {
+            background: linear-gradient(90deg, #7c3aed, #9333ea);
             color: #fff;
-            letter-spacing: 1px;
-        }
-        .currency {
-            color: #a855f7;
-            font-size: 20px;
-        }
-        .mining-box {
-            background: linear-gradient(145deg, #1b1132, #120b24);
-            border: 1px solid #7c3aed;
-            border-radius: 22px;
-            padding: 24px 16px;
-            text-align: center;
-            margin-bottom: 16px;
-            box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
-        }
-        .status {
-            color: #4ade80;
-            font-size: 13px;
-            margin-bottom: 10px;
-        }
-        .mined-counter {
-            font-size: 36px;
-            font-weight: 800;
-            color: #38bdf8;
-            margin: 12px 0;
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-        }
-        .timer {
-            color: #9ca3af;
-            font-size: 13px;
-            margin-bottom: 18px;
-        }
-        .claim-btn {
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
-            color: white;
             border: none;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
             width: 100%;
-            padding: 15px;
-            border-radius: 14px;
+        }
+        .btn-dark {
+            background: #1a1633;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 11px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .row-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0;
+            font-size: 13px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+        /* INPUT BOXES */
+        .input-box {
+            background: #0d0a1a;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .input-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
             font-size: 18px;
             font-weight: bold;
+            width: 55%;
+            text-align: left;
+            outline: none;
+        }
+        .max-btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-            transition: transform 0.1s;
         }
-        .claim-btn:active {
-            transform: scale(0.97);
-        }
-        .stats-grid {
+
+        /* STATION SLOTS */
+        .sub-tabs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .stat-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #131026;
             border-radius: 14px;
-            padding: 12px 8px;
+            padding: 4px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .sub-tab {
             text-align: center;
-        }
-        .stat-val {
+            padding: 8px 4px;
+            font-size: 12px;
             font-weight: bold;
-            font-size: 15px;
-            color: #e2e8f0;
-            margin-bottom: 4px;
-        }
-        .stat-title {
-            font-size: 11px;
-            color: #94a3b8;
-        }
-        .tasks-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: auto;
-        }
-        .task-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 8px 16px;
+            color: var(--text-gray);
             border-radius: 10px;
-            font-weight: bold;
             cursor: pointer;
         }
-        .nav-bar {
+        .sub-tab.active { background: linear-gradient(90deg, #7c3aed, #9333ea); color: #fff; }
+        .slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+        .slot-box {
+            background: #0d0a1c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .slot-box.highlight { border: 1px dashed #a855f7; background: rgba(168, 85, 247, 0.08); }
+
+        /* BOTTOM NAV (6 TABS LIKE RIFTY) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0e0b1d;
+            border-top: 1px solid rgba(255,255,255,0.08);
             display: flex;
             justify-content: space-around;
-            background: #130d24;
-            padding: 12px;
-            border-radius: 16px;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 2px;
+            z-index: 100;
         }
         .nav-item {
-            color: #94a3b8;
-            font-size: 12px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #64748b;
+            font-size: 10px;
+            cursor: pointer;
+            flex: 1;
         }
-        .nav-item.active {
-            color: #a855f7;
-            font-weight: bold;
-        }
+        .nav-item.active { color: #a855f7; font-weight: bold; }
+        .nav-icon { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="badge" id="username">👤 مستخدم تليجرام</div>
-        <div style="font-weight: bold; font-size: 18px; color: #a855f7;">Rocekt 🚀</div>
-    </div>
-
-    <div class="balance-card">
-        <div class="balance-label">الرصيد المعدّن</div>
-        <div class="balance-amount"><span id="total-balance">0.0000</span> <span class="currency">RCKT</span></div>
-    </div>
-
-    <div class="mining-box">
-        <div class="status">● التعدين يعمل الآن (1.00x)</div>
-        <div class="mined-counter">+<span id="mined-now">0.0000</span></div>
-        <div class="timer">السرعة: 25.0 RCKT في الساعة</div>
-        <button class="claim-btn" onclick="claimRewards()">⚡ استلم RCKT</button>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-val">25.0</div>
-            <div class="stat-title">في الساعة</div>
+    <div class="top-header">
+        <div class="header-right">
+            <div class="profile-pill">
+                <div class="avatar-circle" id="user-initial">R</div>
+                <div>
+                    <div style="font-size: 12px; font-weight: bold;" id="user-name">الملف الشخصي</div>
+                    <div style="font-size: 10px; color: var(--text-gray);" data-t="ambassador">مستوى السفير 1</div>
+                </div>
+            </div>
+            <div class="icon-pill" onclick="alert('🔔 لا توجد إشعارات جديدة')">🔔</div>
+            <div class="icon-pill" id="lang-btn" onclick="toggleLanguage()">▾ AR</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-val">~600</div>
-            <div class="stat-title">يومياً</div>
+        <div style="font-weight: 900; font-size: 18px; color: #c084fc;">Rocekt 🚀</div>
+    </div>
+
+    <div id="tab-home" class="section active">
+        <div class="card" style="text-align: center;">
+            <div style="color: var(--text-gray); font-size: 13px;" data-t="total_bal">الرصيد المعدّن</div>
+            <div style="font-size: 34px; font-weight: 900; margin: 8px 0; direction: ltr;">
+                <span id="home-bal">0.0000</span> <span style="font-size: 16px; color: #a855f7;">RCKT</span>
+            </div>
         </div>
-        <div class="stat-item">
-            <div class="stat-val">البرونزي</div>
-            <div class="stat-title">الدوري Lv.1</div>
+
+        <div class="cosmic-card" style="text-align: center;">
+            <div style="color: #4ade80; font-size: 13px; font-weight: bold;" id="home-status">● التعدين يعمل الآن (1.00x)</div>
+            <div style="font-size: 38px; font-weight: 900; color: #38bdf8; margin: 12px 0; direction: ltr;">+<span id="live-mined">0.0000</span></div>
+            <div style="color: #cbd5e1; font-size: 12px; margin-bottom: 14px;"><span data-t="speed">السرعة</span>: <span id="home-speed">25.0</span> RCKT/h</div>
+            <button class="btn-purple" onclick="claimAll()" data-t="claim_btn">⚡ استلم RCKT</button>
+        </div>
+
+        <div class="grid-3">
+            <div class="card" style="text-align: center; padding: 10px 4px;">
+                <div style="font-weight: bold; font-size: 15px;" id="stat-hr">25.0</div>
+                <div style="font-size: 11px; color: var(--text-gray);" data-t="per_hour">في الساعة</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 10px 4px;">
+                <div style="font-weight: bold; font-size: 15px;" id="stat-day">~600</div>
+                <div style="font-size: 11px; color: var(--text-gray);" data-t="daily">يومياً</div>
+            </div>
+            <div class="card" style="text-align: center; padding: 10px 4px;">
+                <div style="font-weight: bold; font-size: 15px; color: #fbbf24;" data-t="bronze">البرونزي</div>
+                <div style="font-size: 11px; color: var(--text-gray);">Lv.<span id="stat-lv">1</span></div>
+            </div>
+        </div>
+
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="font-weight: bold; font-size: 14px;" data-t="tasks_center">مركز المهام</div>
+                <div style="font-size: 12px; color: #4ade80;">+100 RCKT</div>
+            </div>
+            <button class="max-btn" style="padding: 8px 16px;" id="home-task-btn" onclick="doHomeTask()" data-t="join">انضم</button>
         </div>
     </div>
 
-    <div class="tasks-card">
-        <div>
-            <div style="font-weight: bold; font-size: 15px;">مركز المهام</div>
-            <div style="font-size: 12px; color: #9ca3af;">احصل على +100 RCKT مكافأة</div>
-        </div>
-        <button class="task-btn" id="task-btn" onclick="completeTask()">انضم</button>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active">🏠 الرئيسية</div>
-        <div class="nav-item" onclick="alert('قريباً: ترقية سرعة التعدين')">⛏️ التعدين</div>
-        <div class="nav-item" onclick="inviteFriend()">👥 الأصدقاء</div>
-        <div class="nav-item" onclick="alert('قريباً: ربط محفظة TON')">💼 المحفظة</div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('username').innerText = "👤 " + tg.initDataUnsafe.user.first_name;
-        }
-
-        let totalBalance = parseFloat(localStorage.getItem('rckt_balance')) || 0;
-        let lastClaimTime = parseInt(localStorage.getItem('rckt_last_claim')) || Date.now();
-        const ratePerSecond = 25 / 3600; 
-
-        document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
-
-        function updateMining() {
-            const now = Date.now();
-            const secondsPassed = (now - lastClaimTime) / 1000;
-            const mined = secondsPassed * ratePerSecond;
-            document.getElementById('mined-now').innerText = mined.toFixed(4);
-        }
-
-        setInterval(updateMining, 100);
-
-        function claimRewards() {
-            const minedText = document.getElementById('mined-now').innerText;
-            const minedAmount = parseFloat(minedText);
-            if (minedAmount > 0.0001) {
-                totalBalance += minedAmount;
-                lastClaimTime = Date.now();
-                localStorage.setItem('rckt_balance', totalBalance);
-                localStorage.setItem('rckt_last_claim', lastClaimTime);
-                document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
-                document.getElementById('mined-now').innerText = "0.0000";
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            }
-        }
-
-        function completeTask() {
-            if (!localStorage.getItem('rckt_task1')) {
-                totalBalance += 100;
-                localStorage.setItem('rckt_balance', totalBalance);
-                localStorage.setItem('rckt_task1', 'done');
-                document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
-                document.getElementById('task-btn').innerText = "تم ✓";
-                document.getElementById('task-btn').style.background = "#16a34a";
-            }
-        }
-
-        function inviteFriend() {
-            alert("انسخ رابط البوت الخاص بك وشاركه مع أصدقائك!");
-        }
-
-        if (localStorage.getItem('rckt_task1')) {
-            document.getElementById('task-btn').innerText = "تم ✓";
-            document.getElementById('task-btn').style.background = "#16a34a";
-        }
-    </script>
-</body>
-</html>
+    <div id="tab-mining" class="section">
+        <div style="margin-bottom: 12px;">
