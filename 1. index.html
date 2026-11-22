@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rocekt Mining</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at top, #1e1035 0%, #0a0612 100%);
+            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        .balance-card {
+            background: rgba(25, 18, 45, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 18px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .balance-label {
+            color: #a1a1aa;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .currency {
+            color: #a855f7;
+            font-size: 20px;
+        }
+        .mining-box {
+            background: linear-gradient(145deg, #1b1132, #120b24);
+            border: 1px solid #7c3aed;
+            border-radius: 22px;
+            padding: 24px 16px;
+            text-align: center;
+            margin-bottom: 16px;
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.2);
+        }
+        .status {
+            color: #4ade80;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .mined-counter {
+            font-size: 36px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin: 12px 0;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+        .timer {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+        .claim-btn {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            transition: transform 0.1s;
+        }
+        .claim-btn:active {
+            transform: scale(0.97);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+        .stat-val {
+            font-weight: bold;
+            font-size: 15px;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+        .stat-title {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .tasks-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: auto;
+        }
+        .task-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #130d24;
+            padding: 12px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-item {
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+        }
+        .nav-item.active {
+            color: #a855f7;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="badge" id="username">👤 مستخدم تليجرام</div>
+        <div style="font-weight: bold; font-size: 18px; color: #a855f7;">Rocekt 🚀</div>
+    </div>
+
+    <div class="balance-card">
+        <div class="balance-label">الرصيد المعدّن</div>
+        <div class="balance-amount"><span id="total-balance">0.0000</span> <span class="currency">RCKT</span></div>
+    </div>
+
+    <div class="mining-box">
+        <div class="status">● التعدين يعمل الآن (1.00x)</div>
+        <div class="mined-counter">+<span id="mined-now">0.0000</span></div>
+        <div class="timer">السرعة: 25.0 RCKT في الساعة</div>
+        <button class="claim-btn" onclick="claimRewards()">⚡ استلم RCKT</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-val">25.0</div>
+            <div class="stat-title">في الساعة</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">~600</div>
+            <div class="stat-title">يومياً</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-val">البرونزي</div>
+            <div class="stat-title">الدوري Lv.1</div>
+        </div>
+    </div>
+
+    <div class="tasks-card">
+        <div>
+            <div style="font-weight: bold; font-size: 15px;">مركز المهام</div>
+            <div style="font-size: 12px; color: #9ca3af;">احصل على +100 RCKT مكافأة</div>
+        </div>
+        <button class="task-btn" id="task-btn" onclick="completeTask()">انضم</button>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active">🏠 الرئيسية</div>
+        <div class="nav-item" onclick="alert('قريباً: ترقية سرعة التعدين')">⛏️ التعدين</div>
+        <div class="nav-item" onclick="inviteFriend()">👥 الأصدقاء</div>
+        <div class="nav-item" onclick="alert('قريباً: ربط محفظة TON')">💼 المحفظة</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('username').innerText = "👤 " + tg.initDataUnsafe.user.first_name;
+        }
+
+        let totalBalance = parseFloat(localStorage.getItem('rckt_balance')) || 0;
+        let lastClaimTime = parseInt(localStorage.getItem('rckt_last_claim')) || Date.now();
+        const ratePerSecond = 25 / 3600; 
+
+        document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
+
+        function updateMining() {
+            const now = Date.now();
+            const secondsPassed = (now - lastClaimTime) / 1000;
+            const mined = secondsPassed * ratePerSecond;
+            document.getElementById('mined-now').innerText = mined.toFixed(4);
+        }
+
+        setInterval(updateMining, 100);
+
+        function claimRewards() {
+            const minedText = document.getElementById('mined-now').innerText;
+            const minedAmount = parseFloat(minedText);
+            if (minedAmount > 0.0001) {
+                totalBalance += minedAmount;
+                lastClaimTime = Date.now();
+                localStorage.setItem('rckt_balance', totalBalance);
+                localStorage.setItem('rckt_last_claim', lastClaimTime);
+                document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
+                document.getElementById('mined-now').innerText = "0.0000";
+                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }
+        }
+
+        function completeTask() {
+            if (!localStorage.getItem('rckt_task1')) {
+                totalBalance += 100;
+                localStorage.setItem('rckt_balance', totalBalance);
+                localStorage.setItem('rckt_task1', 'done');
+                document.getElementById('total-balance').innerText = totalBalance.toFixed(4);
+                document.getElementById('task-btn').innerText = "تم ✓";
+                document.getElementById('task-btn').style.background = "#16a34a";
+            }
+        }
+
+        function inviteFriend() {
+            alert("انسخ رابط البوت الخاص بك وشاركه مع أصدقائك!");
+        }
+
+        if (localStorage.getItem('rckt_task1')) {
+            document.getElementById('task-btn').innerText = "تم ✓";
+            document.getElementById('task-btn').style.background = "#16a34a";
+        }
+    </script>
+</body>
+</html>
