@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Rocekt Mining</title>
+<title>Rocekt Miner Pro</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { background:#090714; color:#fff; font-family:system-ui, sans-serif; margin:0; padding:14px 14px 85px 14px; user-select:none; }
@@ -22,7 +22,7 @@
   .input-wrap { background:#0b0817; border:1px solid rgba(139,92,246,0.4); border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center; margin:10px 0; }
   .input-wrap input { background:transparent; border:none; color:#fff; font-size:18px; font-weight:bold; width:60%; text-align:left; outline:none; }
   .max-btn { background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.4); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:bold; }
-  .menu { position:fixed; bottom:0; left:0; right:0; background:#100c20; border-top:1px solid rgba(168,85,247,0.35); display:flex; z-index:999; }
+  .menu { position:fixed; bottom:0; left:0; right:0; background:#100c20; border-top:1px solid rgba(168,85,247,0.35); display:flex; z-index:9999; }
   .menu button { flex:1; background:none; border:none; color:#94a3b8; padding:14px 4px; font-size:12px; font-weight:bold; cursor:pointer; }
   .menu button.active { color:#c084fc; background:#191333; }
 </style>
@@ -34,6 +34,7 @@
   <div class="pill" style="color:#4ade80;" id="sync-status">● متصل بالسحابة</div>
 </div>
 
+<!-- 1. الرئيسية -->
 <div id="t1" class="tab show">
   <div class="box">
     <div style="color:#94a3b8; font-size:13px;">الرصيد المحفوظ</div>
@@ -47,6 +48,7 @@
   </div>
 </div>
 
+<!-- 2. التعدين -->
 <div id="t2" class="tab">
   <div class="hero">
     <h3>⚡ ترقية سرعة التعدين</h3>
@@ -55,6 +57,7 @@
   </div>
 </div>
 
+<!-- 3. الأصدقاء -->
 <div id="t3" class="tab">
   <div class="hero">
     <div style="font-size:38px; font-weight:900; color:#fbbf24;">5%</div>
@@ -66,6 +69,7 @@
   </div>
 </div>
 
+<!-- 4. المحفظة -->
 <div id="t4" class="tab">
   <div class="hero">
     <div style="font-size:15px; font-weight:bold; color:#38bdf8;">💎 تداول وتوثيق العملة</div>
@@ -104,25 +108,25 @@
 </div>
 
 <script>
-  const SB_URL = "https://yiemsuqcfxgetantzoac.supabase.co";
-  const SB_KEY = "sb_publishable_1vD_i6Os9U0jJc6_FVU9mA_Ymjsr-uE";
-  const ADMIN_WALLET = "UQCXsN9poZUtYtbRqRlqssufU0I8P3GE3mqjul9edk9tUuRP";
-  const TOKEN_CONTRACT = "EQCfFg4Z9Ci0uijXAMFviLyCXgLzDrHpptK9rbKF0zX_XoRi";
+  var SB_URL = "https://supabase.co";
+  var SB_KEY = "sb_publishable_1vD_i6Os9U0jJc6_FVU9mA_Ymjsr-uE";
+  var ADMIN_WALLET = "UQCXsN9poZUtYtbRqRlqssufU0I8P3GE3mqjul9edk9tUuRP";
+  var TOKEN_CONTRACT = "EQCfFg4Z9Ci0uijXAMFviLyCXgLzDrHpptK9rbKF0zX_XoRi";
 
-  let userId = parseInt(localStorage.getItem('rk_uid')) || Math.floor(100000 + Math.random() * 900000);
+  var userId = parseInt(localStorage.getItem('rk_uid')) || Math.floor(100000 + Math.random() * 900000);
   localStorage.setItem('rk_uid', userId);
 
-  const myLink = "https://t.me_" + userId;
+  var myLink = "https://t.me_" + userId;
   document.getElementById('ref-txt').innerText = myLink;
 
-  let bal = parseFloat(localStorage.getItem('rk_bal')) || 0;
-  let lv = parseInt(localStorage.getItem('rk_lv')) || 1;
-  let start = parseInt(localStorage.getItem('rk_start'));
+  var bal = parseFloat(localStorage.getItem('rk_bal')) || 0;
+  var lv = parseInt(localStorage.getItem('rk_lv')) || 1;
+  var start = parseInt(localStorage.getItem('rk_start'));
   if (!start || isNaN(start) || start > Date.now()) {
     start = Date.now();
     localStorage.setItem('rk_start', start);
   }
-  let walletAddr = localStorage.getItem('rk_w') || "";
+  var walletAddr = localStorage.getItem('rk_w') || "";
 
   function go(id, el) {
     document.getElementById('t1').className = 'tab';
@@ -138,6 +142,7 @@
   }
 
   setInterval(function() {
+    if (isNaN(start) || !start) start = Date.now();
     var sec = Math.max(0, (Date.now() - start) / 1000);
     var mined = sec * ((lv * 25) / 3600);
     document.getElementById('live').innerText = "+" + mined.toFixed(6);
@@ -170,22 +175,13 @@
       var data = await sbFetch("users?id=eq." + userId, "GET");
       if (Array.isArray(data) && data.length > 0) {
         var u = data[0];
-        bal = parseFloat(u.balance) || bal;
-        lv = parseInt(u.level) || lv;
-        if (u.last_claim && parseInt(u.last_claim) > 0) start = parseInt(u.last_claim);
-        walletAddr = u.wallet_address || walletAddr;
+        if (u.balance !== undefined && u.balance !== null) bal = parseFloat(u.balance);
+        if (u.level !== undefined && u.level !== null) lv = parseInt(u.level);
+        if (u.last_claim && !isNaN(parseInt(u.last_claim))) start = parseInt(u.last_claim);
+        if (u.wallet_address) walletAddr = u.wallet_address;
         document.getElementById('ref-cnt').innerText = u.referrals_count || 0;
       } else {
         await sbFetch("users", "POST", {
           id: userId,
-          first_name: "Miner_" + userId,
-          balance: bal,
-          level: lv,
-          last_claim: start
-        });
-      }
-      draw();
-    } catch (e) {
-      document.getElementById('sync-status').innerText = "● متصل محلياً";
-    }
-  }
+
+ 
