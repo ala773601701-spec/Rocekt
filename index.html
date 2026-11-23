@@ -34,19 +34,21 @@
   <div class="pill" style="color:#4ade80;" id="sync-status">● متصل بالسحابة</div>
 </div>
 
+<!-- 1. الرئيسية -->
 <div id="t1" class="tab show">
   <div class="box">
-    <div style="color:#94a3b8; font-size:13px;">الرصيد المحفوظ في السحابة</div>
+    <div style="color:#94a3b8; font-size:13px;">الرصيد المحفوظ</div>
     <h1 id="bal" style="margin:8px 0; direction:ltr;">0.0000 <span style="font-size:15px; color:#a855f7;">RCKT</span></h1>
   </div>
   <div class="hero">
     <div style="color:#4ade80; font-size:13px; font-weight:bold;">● التعدين السحابي نشط</div>
-    <h1 id="live" style="color:#38bdf8; font-size:36px; margin:12px 0; direction:ltr;">+0.0000</h1>
+    <h1 id="live" style="color:#38bdf8; font-size:34px; margin:12px 0; direction:ltr; font-family:monospace;">+0.000000</h1>
     <div style="color:#cbd5e1; font-size:12px;">السرعة: <span id="spd">25</span> RCKT / ساعة (Lv.<span id="lv">1</span>)</div>
-    <button class="btn" onclick="claim()">⚡ استلام وحفظ في الخادم</button>
+    <button class="btn" onclick="claim()">⚡ استلام الرصيد الآن</button>
   </div>
 </div>
 
+<!-- 2. التعدين -->
 <div id="t2" class="tab">
   <div class="hero">
     <h3>⚡ ترقية سرعة التعدين</h3>
@@ -55,17 +57,19 @@
   </div>
 </div>
 
+<!-- 3. الأصدقاء -->
 <div id="t3" class="tab">
   <div class="hero">
     <div style="font-size:38px; font-weight:900; color:#fbbf24;">5%</div>
     <h3>👥 ادعُ أصدقاءك واكسب</h3>
-    <p style="color:#cbd5e1; font-size:12px;">عدد إحالاتك المسجلة في الخادم: <b id="ref-cnt" style="color:#4ade80;">0</b></p>
+    <p style="color:#cbd5e1; font-size:12px;">عدد إحالاتك: <b id="ref-cnt" style="color:#4ade80;">0</b></p>
     <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:10px; font-size:11px; direction:ltr; margin:10px 0; word-break:break-all;" id="ref-txt"></div>
     <button class="btn" onclick="shareLink()">✈️ دعوة صديق عبر تليجرام</button>
     <button class="btn-dark" onclick="copyLink()">📋 نسخ رابط الدعوة</button>
   </div>
 </div>
 
+<!-- 4. المحفظة -->
 <div id="t4" class="tab">
   <div class="hero">
     <div style="font-size:15px; font-weight:bold; color:#38bdf8;">💎 تداول وتوثيق العملة</div>
@@ -117,8 +121,20 @@
 
   let bal = parseFloat(localStorage.getItem('rk_bal')) || 0;
   let lv = parseInt(localStorage.getItem('rk_lv')) || 1;
-  let start = parseInt(localStorage.getItem('rk_start')) || Date.now();
+  let start = parseInt(localStorage.getItem('rk_start'));
+  if (!start || isNaN(start)) {
+    start = Date.now();
+    localStorage.setItem('rk_start', start);
+  }
   let walletAddr = localStorage.getItem('rk_w') || "";
+
+  // تشغيل العداد الفوري (6 أرقام عشرية لترى الحركة كل 100 ملي ثانية)
+  setInterval(function() {
+    const now = Date.now();
+    const sec = Math.max(0, (now - start) / 1000);
+    const mined = sec * ((lv * 25) / 3600);
+    document.getElementById('live').innerText = "+" + mined.toFixed(6);
+  }, 100);
 
   async function sbFetch(path, method = "GET", body = null) {
     const headers = {
@@ -141,7 +157,7 @@
         const u = data;
         bal = parseFloat(u.balance) || bal;
         lv = parseInt(u.level) || lv;
-        start = parseInt(u.last_claim) || start;
+        if (u.last_claim && parseInt(u.last_claim) > 0) start = parseInt(u.last_claim);
         walletAddr = u.wallet_address || walletAddr;
         document.getElementById('ref-cnt').innerText = u.referrals_count || 0;
       } else {
@@ -167,16 +183,10 @@
     if (walletAddr) document.getElementById('wtxt').innerText = walletAddr;
   }
 
-  setInterval(() => {
-    const sec = (Date.now() - start) / 1000;
-    const m = sec * ((lv * 25) / 3600);
-    document.getElementById('live').innerText = "+" + m.toFixed(4);
-  }, 100);
-
   async function claim() {
-    const sec = (Date.now() - start) / 1000;
+    const sec = Math.max(0, (Date.now() - start) / 1000);
     const earned = sec * ((lv * 25) / 3600);
-    if (earned < 0.0001) return;
+    if (earned < 0.00001) return;
     bal += earned;
     start = Date.now();
     localStorage.setItem('rk_bal', bal);
@@ -190,13 +200,3 @@
     if (bal >= cost) {
       bal -= cost;
       lv++;
-      localStorage.setItem('rk_bal', bal);
-      localStorage.setItem('rk_lv', lv);
-      draw();
-      try { await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, level: lv }); } catch(e){}
-      alert("🚀 تمت الترقية وحفظها بنجاح!");
-    } else {
-      alert("⚠️ تحتاج إلى " + cost + " RCKT للترقية.");
-    }
-  }
-
