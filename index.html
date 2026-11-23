@@ -1,242 +1,204 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rocekt Mining</title>
-    <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body {
-            background-color: #090714;
-            color: #ffffff;
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            user-select: none;
-        }
-        .scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px 14px 30px 14px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .user-pill {
-            background: #16122b;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 5px 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .page { display: none; }
-        .page.active { display: block; }
-        .card {
-            background: #131026;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .hero-card {
-            background: linear-gradient(145deg, #25134d, #110c24);
-            border: 1px solid #8b5cf6;
-            border-radius: 22px;
-            padding: 20px 16px;
-            text-align: center;
-            margin-bottom: 14px;
-            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.25);
-        }
-        .btn-main {
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        .btn-main:active { transform: scale(0.96); }
-        .btn-sec {
-            background: #1d1838;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.15);
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; font-size: 13px; }
-        .input-wrap {
-            background: #0b0817;
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 12px;
-            padding: 10px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-        }
-        .input-wrap input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            width: 60%;
-            text-align: left;
-            outline: none;
-        }
-        .badge-btn {
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .nav-bar {
-            background: #100c20;
-            border-top: 1px solid rgba(168, 85, 247, 0.3);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 4px 14px 4px;
-            flex-shrink: 0;
-        }
-        .nav-btn {
-            flex: 1;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 11px;
-            cursor: pointer;
-            padding: 4px 0;
-        }
-        .nav-btn.active { color: #c084fc; font-weight: bold; }
-        .nav-icon { font-size: 18px; display: block; margin-bottom: 3px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Rocekt Mining</title>
+<script src="https://telegram.org"></script>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background:#090714; color:#fff; font-family:system-ui, sans-serif; margin:0; padding:14px 14px 85px 14px; user-select:none; }
+  .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .pill { background:#16122b; border:1px solid rgba(139,92,246,0.35); border-radius:20px; padding:5px 12px; font-size:12px; font-weight:bold; }
+  .box { background:#131026; border:1px solid rgba(139,92,246,0.3); border-radius:18px; padding:16px; text-align:center; margin-bottom:12px; }
+  .hero { background:linear-gradient(145deg, #25134d, #110c24); border:1px solid #8b5cf6; border-radius:20px; padding:18px 16px; text-align:center; margin-bottom:12px; box-shadow:0 6px 25px rgba(139,92,246,0.25); }
+  .btn { background:linear-gradient(90deg, #7c3aed, #a855f7); color:#fff; border:none; width:100%; padding:14px; border-radius:14px; font-size:15px; font-weight:bold; margin-top:10px; cursor:pointer; }
+  .btn:active { transform:scale(0.97); }
+  .btn-dark { background:#1c1736; color:#fff; border:1px solid rgba(255,255,255,0.15); width:100%; padding:12px; border-radius:12px; font-size:13px; font-weight:bold; margin-top:8px; cursor:pointer; }
+  .btn-ton { background:linear-gradient(90deg, #0284c7, #38bdf8); color:#fff; border:none; width:100%; padding:13px; border-radius:12px; font-size:14px; font-weight:bold; margin-top:8px; cursor:pointer; }
+  .tab { display:none; }
+  .tab.show { display:block; }
+  .row { display:flex; justify-content:space-between; align-items:center; margin:8px 0; font-size:13px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .input-wrap { background:#0b0817; border:1px solid rgba(139,92,246,0.4); border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center; margin:10px 0; }
+  .input-wrap input { background:transparent; border:none; color:#fff; font-size:18px; font-weight:bold; width:60%; text-align:left; outline:none; }
+  .max-btn { background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.4); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:bold; }
+  .menu { position:fixed; bottom:0; left:0; right:0; background:#100c20; border-top:1px solid rgba(168,85,247,0.35); display:flex; z-index:999; }
+  .menu button { flex:1; background:none; border:none; color:#94a3b8; padding:12px 4px; font-size:12px; font-weight:bold; cursor:pointer; }
+  .menu button.active { color:#c084fc; background:#191333; }
+</style>
 </head>
 <body>
 
-<div class="scroll-area">
-    <div class="header">
-        <div class="user-pill">🚀 <span id="u-name">لاعب Rocekt</span></div>
-        <div style="font-weight: 900; font-size: 18px; color: #c084fc;">Rocekt</div>
-    </div>
-
-    <div id="p-home" class="page active">
-        <div class="card" style="text-align: center;">
-            <div style="color: #94a3b8; font-size: 13px;">الرصيد الإجمالي</div>
-            <div style="font-size: 32px; font-weight: 900; margin-top: 6px; direction: ltr;">
-                <span id="bal-display">0.0000</span> <span style="font-size: 15px; color: #a855f7;">RCKT</span>
-            </div>
-        </div>
-
-        <div class="hero-card">
-            <div style="color: #4ade80; font-size: 13px; font-weight: bold;">● التعدين السحابي نشط</div>
-            <div style="font-size: 38px; font-weight: 900; color: #38bdf8; margin: 12px 0; direction: ltr;">+<span id="live-display">0.0000</span></div>
-            <div style="color: #cbd5e1; font-size: 13px; margin-bottom: 10px;">السرعة: <span id="spd-display">25</span> RCKT / ساعة</div>
-            <button type="button" class="btn-main" id="btn-claim">⚡ استلام العملات (Claim)</button>
-        </div>
-
-        <div class="card">
-            <div class="row">
-                <div>
-                    <div style="font-weight: bold;">🎁 مكافأة البداية</div>
-                    <div style="font-size: 12px; color: #4ade80;">+200 RCKT مجاناً</div>
-                </div>
-                <button type="button" class="badge-btn" id="btn-bonus">استلم الآن</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="p-mine" class="page">
-        <div class="hero-card">
-            <div style="font-size: 18px; font-weight: bold;">⚡ ترقية سرعة التعدين</div>
-            <div style="color: #cbd5e1; font-size: 13px; margin: 8px 0;">المستوى الحالي: Lv.<span id="lv-display">1</span></div>
-            <button type="button" class="btn-main" id="btn-upgrade">ترقية (+25/ساعة) • التكلفة: <span id="cost-display">100</span> RCKT</button>
-        </div>
-    </div>
-
-    <div id="p-friends" class="page">
-        <div class="hero-card">
-            <div style="font-size: 36px; font-weight: 900; color: #fbbf24;">5%</div>
-            <div style="font-size: 14px; font-weight: bold; margin: 6px 0 14px 0;">عمولة دائمة من تعدين أصدقائك</div>
-            <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; font-size: 11px; direction: ltr; margin-bottom: 12px; word-break: break-all;" id="ref-box">
-                https://t.me
-            </div>
-            <div class="grid-2">
-                <button type="button" class="btn-main" style="margin:0;" id="btn-share">✈️ دعوة صديق</button>
-                <button type="button" class="btn-sec" id="btn-copy">📋 نسخ الرابط</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="p-wallet" class="page">
-        <div class="hero-card">
-            <div style="font-size: 13px; color: #fbbf24; font-weight: bold;" id="w-status">● ربط محفظة TON</div>
-            <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px;">اربط محفظتك (Tonkeeper أو Telegram Wallet)</div>
-            <button type="button" class="btn-main" id="btn-ton">💳 فتح محفظة Tonkeeper</button>
-        </div>
-
-        <div class="card">
-            <div style="font-weight: bold; margin-bottom: 6px;">سحب عملة RCKT</div>
-            <div class="input-wrap">
-                <button type="button" class="badge-btn" id="btn-max">MAX</button>
-                <input type="number" id="w-input" value="10000">
-                <span style="font-size: 12px; color: #94a3b8;">RCKT</span>
-            </div>
-            <div class="row"><span style="color: #94a3b8;">شرط الاحتفاظ في المحفظة (25%):</span><span style="color: #fbbf24; font-weight: bold;" id="hold-txt">2,500 RCKT</span></div>
-            <div class="row"><span style="color: #94a3b8;">رسوم السحب (5%):</span><span style="color: #f87171;" id="fee-txt">500 RCKT</span></div>
-            <div class="row" style="font-weight: bold;"><span>صافي الاستلام:</span><span style="color: #c084fc;" id="net-txt">9,500 RCKT</span></div>
-            <button type="button" class="btn-main" id="btn-withdraw">تأكيد السحب</button>
-        </div>
-    </div>
+<div class="header">
+  <div class="pill">🚀 <span id="u-name">Miner</span></div>
+  <div class="pill" style="color:#4ade80;" id="sync-status">● متصل بالسحابة</div>
 </div>
 
-<div class="nav-bar">
-    <div class="nav-btn active" data-target="home"><span class="nav-icon">🏠</span>الرئيسية</div>
-    <div class="nav-btn" data-target="mine"><span class="nav-icon">⛏️</span>التعدين</div>
-    <div class="nav-btn" data-target="friends"><span class="nav-icon">👥</span>الأصدقاء</div>
-    <div class="nav-btn" data-target="wallet"><span class="nav-icon">💼</span>المحفظة</div>
+<div id="t1" class="tab show">
+  <div class="box">
+    <div style="color:#94a3b8; font-size:13px;">الرصيد المحفوظ في السحابة</div>
+    <h1 id="bal" style="margin:8px 0; direction:ltr;">0.0000 <span style="font-size:15px; color:#a855f7;">RCKT</span></h1>
+  </div>
+  <div class="hero">
+    <div style="color:#4ade80; font-size:13px; font-weight:bold;">● التعدين السحابي نشط</div>
+    <h1 id="live" style="color:#38bdf8; font-size:36px; margin:12px 0; direction:ltr;">+0.0000</h1>
+    <div style="color:#cbd5e1; font-size:12px;">السرعة: <span id="spd">25</span> RCKT / ساعة (Lv.<span id="lv">1</span>)</div>
+    <button class="btn" onclick="claim()">⚡ استلام وحفظ في الخادم</button>
+  </div>
+</div>
+
+<div id="t2" class="tab">
+  <div class="hero">
+    <h3>⚡ ترقية سرعة التعدين</h3>
+    <p style="color:#cbd5e1; font-size:13px;">ارفع مستواك لزيادة التعدين بمقدار +25 RCKT في الساعة</p>
+    <button class="btn" onclick="upgrade()">🚀 ترقية المستوى (<span id="cost">100</span> RCKT)</button>
+  </div>
+</div>
+
+<div id="t3" class="tab">
+  <div class="hero">
+    <div style="font-size:38px; font-weight:900; color:#fbbf24;">5%</div>
+    <h3>👥 ادعُ أصدقاءك واكسب</h3>
+    <p style="color:#cbd5e1; font-size:12px;">عدد إحالاتك المسجلة في الخادم: <b id="ref-cnt" style="color:#4ade80;">0</b></p>
+    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:10px; font-size:11px; direction:ltr; margin:10px 0; word-break:break-all;" id="ref-txt"></div>
+    <button class="btn" onclick="shareLink()">✈️ دعوة صديق عبر تليجرام</button>
+    <button class="btn-dark" onclick="copyLink()">📋 نسخ رابط الدعوة</button>
+  </div>
+</div>
+
+<div id="t4" class="tab">
+  <div class="hero">
+    <div style="font-size:15px; font-weight:bold; color:#38bdf8;">💎 تداول وتوثيق العملة</div>
+    <div class="grid-2" style="margin-top:10px;">
+      <button class="btn-ton" style="margin:0;" onclick="buyOnStonFi()">+ شراء من STON.fi</button>
+      <button class="btn-dark" style="margin:0;" onclick="copyContract()">📋 نسخ عقد العملة</button>
+    </div>
+    <button class="btn" onclick="verifyWallet005()">🛡️ توثيق الحساب (0.05 TON)</button>
+  </div>
+
+  <div class="box">
+    <div style="font-weight:bold; margin-bottom:4px;">💳 محفظة الاستلام الخاصة بك</div>
+    <p id="wtxt" style="color:#38bdf8; font-size:11px; word-break:break-all; margin:6px 0;">لم يتم ربط محفظتك بعد</p>
+    <button class="btn-dark" onclick="setWallet()">إدخال / تعديل عنوان محفظتي</button>
+  </div>
+
+  <div class="box" style="text-align:right;">
+    <div style="font-weight:bold; text-align:center; margin-bottom:8px;">سحب عملة RCKT</div>
+    <div class="input-wrap">
+      <button class="max-btn" onclick="maxW()">MAX</button>
+      <input type="number" id="w-in" value="10000" oninput="calcW()">
+      <span style="font-size:12px; color:#94a3b8;">RCKT</span>
+    </div>
+    <div class="row"><span style="color:#94a3b8;">شرط الاحتفاظ (25%):</span><span style="color:#fbbf24;" id="w-hold">2,500 RCKT</span></div>
+    <div class="row"><span style="color:#94a3b8;">رسوم السحب (5%):</span><span style="color:#f87171;" id="w-fee">500 RCKT</span></div>
+    <div class="row" style="font-weight:bold;"><span>صافي الاستلام:</span><span style="color:#c084fc;" id="w-net">9,500 RCKT</span></div>
+    <button class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
+  </div>
+</div>
+
+<div class="menu">
+  <button class="active" onclick="go('t1', this)">🏠 الرئيسية</button>
+  <button onclick="go('t2', this)">⛏️ التعدين</button>
+  <button onclick="go('t3', this)">👥 الأصدقاء</button>
+  <button onclick="go('t4', this)">💼 المحفظة</button>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var balance = parseFloat(localStorage.getItem('rk_fast_bal')) || 0;
-    var startTime = parseInt(localStorage.getItem('rk_fast_time')) || Date.now();
-    var level = parseInt(localStorage.getItem('rk_fast_lv')) || 1;
-    var refLink = "https://t.me";
+  const SB_URL = "https://supabase.co";
+  const SB_KEY = "sb_publishable_1vD_i6Os9U0jJc6_FVU9mA_Ymjsr-uE";
+  const ADMIN_WALLET = "UQCXsN9poZUtYtbRqRlqssufU0I8P3GE3mqjul9edk9tUuRP";
+  const TOKEN_CONTRACT = "EQCfFg4Z9Ci0uijXAMFviLyCXgLzDrHpptK9rbKF0zX_XoRi";
 
-    document.getElementById('ref-box').innerText = refLink;
+  let tg = window.Telegram ? window.Telegram.WebApp : null;
+  if (tg) { tg.ready(); tg.expand(); }
 
-    function updateUI() {
-        document.getElementById('bal-display').innerText = balance.toFixed(4);
-        document.getElementById('spd-display').innerText = level * 25;
-        document.getElementById('lv-display').innerText = level;
-        document.getElementById('cost-display').innerText = level * 100;
-        if (localStorage.getItem('rk_fast_bonus')) {
-            document.getElementById('btn-bonus').innerText = "تم الاستلام ✓";
-        }
+  let userId = 10001;
+  let userName = "miner";
+  let firstName = "لاعب Rocekt";
+  let refBy = null;
+
+  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    userId = tg.initDataUnsafe.user.id;
+    userName = tg.initDataUnsafe.user.username || "";
+    firstName = tg.initDataUnsafe.user.first_name || "Miner";
+    if (tg.initDataUnsafe.start_param && tg.initDataUnsafe.start_param.startsWith("ref_")) {
+      refBy = parseInt(tg.initDataUnsafe.start_param.replace("ref_", ""));
     }
-    updateUI();
+  }
 
-    // Live Counter
-    setInterval(function() {
-        var sec = (Date.now() - startTime) / 1000;
-        var mined = sec * ((level * 25) / 3600);
+  document.getElementById('u-name').innerText = firstName;
+  const myLink = `https://t.me{userId}`;
+  document.getElementById('ref-txt').innerText = myLink;
+
+  let bal = 0;
+  let lv = 1;
+  let start = Date.now();
+  let walletAddr = "";
+
+  async function sbFetch(path, method = "GET", body = null) {
+    const headers = {
+      "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation"
+    };
+    const opts = { method, headers };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(SB_URL + "/rest/v1/" + path, opts);
+    return res.json();
+  }
+
+  async function initUser() {
+    try {
+      const data = await sbFetch(`users?id=eq.${userId}`);
+      if (data && data.length > 0) {
+        const u = data;
+        bal = parseFloat(u.balance) || 0;
+        lv = parseInt(u.level) || 1;
+        start = parseInt(u.last_claim) || Date.now();
+        walletAddr = u.wallet_address || "";
+        document.getElementById('ref-cnt').innerText = u.referrals_count || 0;
+      } else {
+        start = Date.now();
+        await sbFetch("users", "POST", {
+          id: userId,
+          username: userName,
+          first_name: firstName,
+          balance: 0,
+          level: 1,
+          last_claim: start,
+          referred_by: (refBy && refBy !== userId) ? refBy : null
+        });
+      }
+      draw();
+    } catch (e) {
+      document.getElementById('sync-status').innerText = "● وضع محلي";
+      document.getElementById('sync-status').style.color = "#fbbf24";
+    }
+  }
+
+  function draw() {
+    document.getElementById('bal').innerHTML = bal.toFixed(4) + ' <span style="font-size:15px; color:#a855f7;">RCKT</span>';
+    document.getElementById('spd').innerText = lv * 25;
+    document.getElementById('lv').innerText = lv;
+    document.getElementById('cost').innerText = lv * 100;
+    if (walletAddr) document.getElementById('wtxt').innerText = walletAddr;
+  }
+
+  setInterval(() => {
+    const sec = (Date.now() - start) / 1000;
+    const m = sec * ((lv * 25) / 3600);
+    document.getElementById('live').innerText = "+" + m.toFixed(4);
+  }, 100);
+
+  async function claim() {
+    const sec = (Date.now() - start) / 1000;
+    const earned = sec * ((lv * 25) / 3600);
+    if (earned < 0.0001) return;
+    bal += earned;
+    start = Date.now();
+    draw();
+    await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, last_claim: start });
+
+    
