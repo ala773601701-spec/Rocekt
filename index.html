@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rocekt Mining</title>
-    <script src="https://telegram.org"></script>
-    <script src="https://unpkg.com"></script>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body {
@@ -36,9 +34,6 @@
             border: 1px solid rgba(139, 92, 246, 0.3);
             border-radius: 20px;
             padding: 5px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             font-size: 12px;
             font-weight: bold;
         }
@@ -72,7 +67,7 @@
             cursor: pointer;
             margin-top: 8px;
         }
-        .btn-main:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-main:active { transform: scale(0.96); }
         .btn-sec {
             background: #1d1838;
             color: #fff;
@@ -84,9 +79,7 @@
             font-weight: bold;
             cursor: pointer;
         }
-        .btn-sec:active { transform: scale(0.97); }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; font-size: 13px; }
         .input-wrap {
             background: #0b0817;
@@ -112,7 +105,7 @@
             background: rgba(56, 189, 248, 0.15);
             color: #38bdf8;
             border: 1px solid rgba(56, 189, 248, 0.4);
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: bold;
@@ -125,7 +118,6 @@
             justify-content: space-around;
             padding: 10px 4px 14px 4px;
             flex-shrink: 0;
-            z-index: 999;
         }
         .nav-btn {
             flex: 1;
@@ -159,7 +151,7 @@
             <div style="color: #4ade80; font-size: 13px; font-weight: bold;">● التعدين السحابي نشط</div>
             <div style="font-size: 38px; font-weight: 900; color: #38bdf8; margin: 12px 0; direction: ltr;">+<span id="live-display">0.0000</span></div>
             <div style="color: #cbd5e1; font-size: 13px; margin-bottom: 10px;">السرعة: <span id="spd-display">25</span> RCKT / ساعة</div>
-            <button type="button" class="btn-main" onclick="doClaim()">⚡ استلام العملات (Claim)</button>
+            <button type="button" class="btn-main" id="btn-claim">⚡ استلام العملات (Claim)</button>
         </div>
 
         <div class="card">
@@ -168,7 +160,7 @@
                     <div style="font-weight: bold;">🎁 مكافأة البداية</div>
                     <div style="font-size: 12px; color: #4ade80;">+200 RCKT مجاناً</div>
                 </div>
-                <button type="button" class="badge-btn" id="bonus-btn" onclick="doBonus()">استلم الآن</button>
+                <button type="button" class="badge-btn" id="btn-bonus">استلم الآن</button>
             </div>
         </div>
     </div>
@@ -177,7 +169,7 @@
         <div class="hero-card">
             <div style="font-size: 18px; font-weight: bold;">⚡ ترقية سرعة التعدين</div>
             <div style="color: #cbd5e1; font-size: 13px; margin: 8px 0;">المستوى الحالي: Lv.<span id="lv-display">1</span></div>
-            <button type="button" class="btn-main" onclick="doUpgrade()">ترقية (+25/ساعة) • التكلفة: <span id="cost-display">100</span> RCKT</button>
+            <button type="button" class="btn-main" id="btn-upgrade">ترقية (+25/ساعة) • التكلفة: <span id="cost-display">100</span> RCKT</button>
         </div>
     </div>
 
@@ -189,55 +181,62 @@
                 https://t.me
             </div>
             <div class="grid-2">
-                <button type="button" class="btn-main" style="margin:0;" onclick="shareFriend()">✈️ دعوة صديق</button>
-                <button type="button" class="btn-sec" onclick="copyFriend()">📋 نسخ الرابط</button>
+                <button type="button" class="btn-main" style="margin:0;" id="btn-share">✈️ دعوة صديق</button>
+                <button type="button" class="btn-sec" id="btn-copy">📋 نسخ الرابط</button>
             </div>
         </div>
     </div>
 
     <div id="p-wallet" class="page">
         <div class="hero-card">
-            <div style="font-size: 13px; color: #fbbf24; font-weight: bold;" id="w-status">● المحفظة غير متصلة</div>
-            <div style="font-size: 13px; color: #38bdf8; margin-top: 6px;">رصيد الشبكة: <span id="ton-val">0.00</span> TON</div>
-            <button type="button" class="btn-main" onclick="openTon()">💳 ربط محفظة TON</button>
+            <div style="font-size: 13px; color: #fbbf24; font-weight: bold;" id="w-status">● ربط محفظة TON</div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-top: 6px;">اربط محفظتك (Tonkeeper أو Telegram Wallet)</div>
+            <button type="button" class="btn-main" id="btn-ton">💳 فتح محفظة Tonkeeper</button>
         </div>
 
         <div class="card">
             <div style="font-weight: bold; margin-bottom: 6px;">سحب عملة RCKT</div>
             <div class="input-wrap">
-                <button type="button" class="badge-btn" onclick="maxWithdraw()">MAX</button>
-                <input type="number" id="w-input" value="10000" oninput="calcFee()">
+                <button type="button" class="badge-btn" id="btn-max">MAX</button>
+                <input type="number" id="w-input" value="10000">
                 <span style="font-size: 12px; color: #94a3b8;">RCKT</span>
             </div>
             <div class="row"><span style="color: #94a3b8;">شرط الاحتفاظ في المحفظة (25%):</span><span style="color: #fbbf24; font-weight: bold;" id="hold-txt">2,500 RCKT</span></div>
             <div class="row"><span style="color: #94a3b8;">رسوم السحب (5%):</span><span style="color: #f87171;" id="fee-txt">500 RCKT</span></div>
             <div class="row" style="font-weight: bold;"><span>صافي الاستلام:</span><span style="color: #c084fc;" id="net-txt">9,500 RCKT</span></div>
-            <button type="button" class="btn-main" onclick="requestWithdraw()">تأكيد السحب</button>
+            <button type="button" class="btn-main" id="btn-withdraw">تأكيد السحب</button>
         </div>
     </div>
 </div>
 
 <div class="nav-bar">
-    <div class="nav-btn active" onclick="goPage('home', this)"><span class="nav-icon">🏠</span>الرئيسية</div>
-    <div class="nav-btn" onclick="goPage('mine', this)"><span class="nav-icon">⛏️</span>التعدين</div>
-    <div class="nav-btn" onclick="goPage('friends', this)"><span class="nav-icon">👥</span>الأصدقاء</div>
-    <div class="nav-btn" onclick="goPage('wallet', this)"><span class="nav-icon">💼</span>المحفظة</div>
+    <div class="nav-btn active" data-target="home"><span class="nav-icon">🏠</span>الرئيسية</div>
+    <div class="nav-btn" data-target="mine"><span class="nav-icon">⛏️</span>التعدين</div>
+    <div class="nav-btn" data-target="friends"><span class="nav-icon">👥</span>الأصدقاء</div>
+    <div class="nav-btn" data-target="wallet"><span class="nav-icon">💼</span>المحفظة</div>
 </div>
 
 <script>
-    // Safe Telegram Init
-    let tg = null;
-    try {
-        if (window.Telegram && window.Telegram.WebApp) {
-            tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
+document.addEventListener("DOMContentLoaded", function() {
+    var balance = parseFloat(localStorage.getItem('rk_fast_bal')) || 0;
+    var startTime = parseInt(localStorage.getItem('rk_fast_time')) || Date.now();
+    var level = parseInt(localStorage.getItem('rk_fast_lv')) || 1;
+    var refLink = "https://t.me";
+
+    document.getElementById('ref-box').innerText = refLink;
+
+    function updateUI() {
+        document.getElementById('bal-display').innerText = balance.toFixed(4);
+        document.getElementById('spd-display').innerText = level * 25;
+        document.getElementById('lv-display').innerText = level;
+        document.getElementById('cost-display').innerText = level * 100;
+        if (localStorage.getItem('rk_fast_bonus')) {
+            document.getElementById('btn-bonus').innerText = "تم الاستلام ✓";
         }
-    } catch (e) {}
-
-    let uid = "1001";
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        document.getElementById('u-name').innerText = tg.initDataUnsafe.user.first_name;
-        uid = tg.initDataUnsafe.user.id;
     }
+    updateUI();
 
+    // Live Counter
+    setInterval(function() {
+        var sec = (Date.now() - startTime) / 1000;
+        var mined = sec * ((level * 25) / 3600);
