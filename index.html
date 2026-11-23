@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Rocekt Mining</title>
-<script src="https://telegram.org"></script>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { background:#090714; color:#fff; font-family:system-ui, sans-serif; margin:0; padding:14px 14px 85px 14px; user-select:none; }
@@ -31,7 +30,7 @@
 <body>
 
 <div class="header">
-  <div class="pill">🚀 <span id="u-name">Miner</span></div>
+  <div class="pill">🚀 <span id="u-name">لاعب Rocekt</span></div>
   <div class="pill" style="color:#4ade80;" id="sync-status">● متصل بالسحابة</div>
 </div>
 
@@ -105,36 +104,21 @@
 </div>
 
 <script>
-  const SB_URL = "https://supabase.co";
+  const SB_URL = "https://yiemsuqcfxgetantzoac.supabase.co";
   const SB_KEY = "sb_publishable_1vD_i6Os9U0jJc6_FVU9mA_Ymjsr-uE";
   const ADMIN_WALLET = "UQCXsN9poZUtYtbRqRlqssufU0I8P3GE3mqjul9edk9tUuRP";
   const TOKEN_CONTRACT = "EQCfFg4Z9Ci0uijXAMFviLyCXgLzDrHpptK9rbKF0zX_XoRi";
 
-  let tg = window.Telegram ? window.Telegram.WebApp : null;
-  if (tg) { tg.ready(); tg.expand(); }
+  let userId = parseInt(localStorage.getItem('rk_uid')) || Math.floor(100000 + Math.random() * 900000);
+  localStorage.setItem('rk_uid', userId);
 
-  let userId = 10001;
-  let userName = "miner";
-  let firstName = "لاعب Rocekt";
-  let refBy = null;
-
-  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-    userId = tg.initDataUnsafe.user.id;
-    userName = tg.initDataUnsafe.user.username || "";
-    firstName = tg.initDataUnsafe.user.first_name || "Miner";
-    if (tg.initDataUnsafe.start_param && tg.initDataUnsafe.start_param.startsWith("ref_")) {
-      refBy = parseInt(tg.initDataUnsafe.start_param.replace("ref_", ""));
-    }
-  }
-
-  document.getElementById('u-name').innerText = firstName;
   const myLink = `https://t.me{userId}`;
   document.getElementById('ref-txt').innerText = myLink;
 
-  let bal = 0;
-  let lv = 1;
-  let start = Date.now();
-  let walletAddr = "";
+  let bal = parseFloat(localStorage.getItem('rk_bal')) || 0;
+  let lv = parseInt(localStorage.getItem('rk_lv')) || 1;
+  let start = parseInt(localStorage.getItem('rk_start')) || Date.now();
+  let walletAddr = localStorage.getItem('rk_w') || "";
 
   async function sbFetch(path, method = "GET", body = null) {
     const headers = {
@@ -150,31 +134,28 @@
   }
 
   async function initUser() {
+    draw();
     try {
       const data = await sbFetch(`users?id=eq.${userId}`);
       if (data && data.length > 0) {
         const u = data;
-        bal = parseFloat(u.balance) || 0;
-        lv = parseInt(u.level) || 1;
-        start = parseInt(u.last_claim) || Date.now();
-        walletAddr = u.wallet_address || "";
+        bal = parseFloat(u.balance) || bal;
+        lv = parseInt(u.level) || lv;
+        start = parseInt(u.last_claim) || start;
+        walletAddr = u.wallet_address || walletAddr;
         document.getElementById('ref-cnt').innerText = u.referrals_count || 0;
       } else {
-        start = Date.now();
         await sbFetch("users", "POST", {
           id: userId,
-          username: userName,
-          first_name: firstName,
-          balance: 0,
-          level: 1,
-          last_claim: start,
-          referred_by: (refBy && refBy !== userId) ? refBy : null
+          first_name: "Miner_" + userId,
+          balance: bal,
+          level: lv,
+          last_claim: start
         });
       }
       draw();
     } catch (e) {
-      document.getElementById('sync-status').innerText = "● وضع محلي";
-      document.getElementById('sync-status').style.color = "#fbbf24";
+      document.getElementById('sync-status').innerText = "● متصل محلياً";
     }
   }
 
@@ -198,7 +179,24 @@
     if (earned < 0.0001) return;
     bal += earned;
     start = Date.now();
+    localStorage.setItem('rk_bal', bal);
+    localStorage.setItem('rk_start', start);
     draw();
-    await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, last_claim: start });
+    try { await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, last_claim: start }); } catch(e){}
+  }
 
-    
+  async function upgrade() {
+    const cost = lv * 100;
+    if (bal >= cost) {
+      bal -= cost;
+      lv++;
+      localStorage.setItem('rk_bal', bal);
+      localStorage.setItem('rk_lv', lv);
+      draw();
+      try { await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, level: lv }); } catch(e){}
+      alert("🚀 تمت الترقية وحفظها بنجاح!");
+    } else {
+      alert("⚠️ تحتاج إلى " + cost + " RCKT للترقية.");
+    }
+  }
+
