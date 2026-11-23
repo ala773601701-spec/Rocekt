@@ -23,7 +23,7 @@
   .input-wrap input { background:transparent; border:none; color:#fff; font-size:18px; font-weight:bold; width:60%; text-align:left; outline:none; }
   .max-btn { background:rgba(56,189,248,0.15); color:#38bdf8; border:1px solid rgba(56,189,248,0.4); padding:5px 10px; border-radius:8px; font-size:12px; font-weight:bold; }
   .menu { position:fixed; bottom:0; left:0; right:0; background:#100c20; border-top:1px solid rgba(168,85,247,0.35); display:flex; z-index:999; }
-  .menu button { flex:1; background:none; border:none; color:#94a3b8; padding:12px 4px; font-size:12px; font-weight:bold; cursor:pointer; }
+  .menu button { flex:1; background:none; border:none; color:#94a3b8; padding:14px 4px; font-size:12px; font-weight:bold; cursor:pointer; }
   .menu button.active { color:#c084fc; background:#191333; }
 </style>
 </head>
@@ -34,7 +34,6 @@
   <div class="pill" style="color:#4ade80;" id="sync-status">● متصل بالسحابة</div>
 </div>
 
-<!-- 1. الرئيسية -->
 <div id="t1" class="tab show">
   <div class="box">
     <div style="color:#94a3b8; font-size:13px;">الرصيد المحفوظ</div>
@@ -44,67 +43,64 @@
     <div style="color:#4ade80; font-size:13px; font-weight:bold;">● التعدين السحابي نشط</div>
     <h1 id="live" style="color:#38bdf8; font-size:34px; margin:12px 0; direction:ltr; font-family:monospace;">+0.000000</h1>
     <div style="color:#cbd5e1; font-size:12px;">السرعة: <span id="spd">25</span> RCKT / ساعة (Lv.<span id="lv">1</span>)</div>
-    <button class="btn" onclick="claim()">⚡ استلام الرصيد الآن</button>
+    <button type="button" class="btn" onclick="claim()">⚡ استلام الرصيد الآن</button>
   </div>
 </div>
 
-<!-- 2. التعدين -->
 <div id="t2" class="tab">
   <div class="hero">
     <h3>⚡ ترقية سرعة التعدين</h3>
     <p style="color:#cbd5e1; font-size:13px;">ارفع مستواك لزيادة التعدين بمقدار +25 RCKT في الساعة</p>
-    <button class="btn" onclick="upgrade()">🚀 ترقية المستوى (<span id="cost">100</span> RCKT)</button>
+    <button type="button" class="btn" onclick="upgrade()">🚀 ترقية المستوى (<span id="cost">100</span> RCKT)</button>
   </div>
 </div>
 
-<!-- 3. الأصدقاء -->
 <div id="t3" class="tab">
   <div class="hero">
     <div style="font-size:38px; font-weight:900; color:#fbbf24;">5%</div>
     <h3>👥 ادعُ أصدقاءك واكسب</h3>
     <p style="color:#cbd5e1; font-size:12px;">عدد إحالاتك: <b id="ref-cnt" style="color:#4ade80;">0</b></p>
     <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:10px; font-size:11px; direction:ltr; margin:10px 0; word-break:break-all;" id="ref-txt"></div>
-    <button class="btn" onclick="shareLink()">✈️ دعوة صديق عبر تليجرام</button>
-    <button class="btn-dark" onclick="copyLink()">📋 نسخ رابط الدعوة</button>
+    <button type="button" class="btn" onclick="shareLink()">✈️ دعوة صديق عبر تليجرام</button>
+    <button type="button" class="btn-dark" onclick="copyLink()">📋 نسخ رابط الدعوة</button>
   </div>
 </div>
 
-<!-- 4. المحفظة -->
 <div id="t4" class="tab">
   <div class="hero">
     <div style="font-size:15px; font-weight:bold; color:#38bdf8;">💎 تداول وتوثيق العملة</div>
     <div class="grid-2" style="margin-top:10px;">
-      <button class="btn-ton" style="margin:0;" onclick="buyOnStonFi()">+ شراء من STON.fi</button>
-      <button class="btn-dark" style="margin:0;" onclick="copyContract()">📋 نسخ عقد العملة</button>
+      <button type="button" class="btn-ton" style="margin:0;" onclick="buyOnStonFi()">+ شراء من STON.fi</button>
+      <button type="button" class="btn-dark" style="margin:0;" onclick="copyContract()">📋 نسخ عقد العملة</button>
     </div>
-    <button class="btn" onclick="verifyWallet005()">🛡️ توثيق الحساب (0.05 TON)</button>
+    <button type="button" class="btn" onclick="verifyWallet005()">🛡️ توثيق الحساب (0.05 TON)</button>
   </div>
 
   <div class="box">
     <div style="font-weight:bold; margin-bottom:4px;">💳 محفظة الاستلام الخاصة بك</div>
     <p id="wtxt" style="color:#38bdf8; font-size:11px; word-break:break-all; margin:6px 0;">لم يتم ربط محفظتك بعد</p>
-    <button class="btn-dark" onclick="setWallet()">إدخال / تعديل عنوان محفظتي</button>
+    <button type="button" class="btn-dark" onclick="setWallet()">إدخال / تعديل عنوان محفظتي</button>
   </div>
 
   <div class="box" style="text-align:right;">
     <div style="font-weight:bold; text-align:center; margin-bottom:8px;">سحب عملة RCKT</div>
     <div class="input-wrap">
-      <button class="max-btn" onclick="maxW()">MAX</button>
+      <button type="button" class="max-btn" onclick="maxW()">MAX</button>
       <input type="number" id="w-in" value="10000" oninput="calcW()">
       <span style="font-size:12px; color:#94a3b8;">RCKT</span>
     </div>
     <div class="row"><span style="color:#94a3b8;">شرط الاحتفاظ (25%):</span><span style="color:#fbbf24;" id="w-hold">2,500 RCKT</span></div>
     <div class="row"><span style="color:#94a3b8;">رسوم السحب (5%):</span><span style="color:#f87171;" id="w-fee">500 RCKT</span></div>
     <div class="row" style="font-weight:bold;"><span>صافي الاستلام:</span><span style="color:#c084fc;" id="w-net">9,500 RCKT</span></div>
-    <button class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
+    <button type="button" class="btn" onclick="submitWithdraw()">تأكيد طلب السحب</button>
   </div>
 </div>
 
 <div class="menu">
-  <button class="active" onclick="go('t1', this)">🏠 الرئيسية</button>
-  <button onclick="go('t2', this)">⛏️ التعدين</button>
-  <button onclick="go('t3', this)">👥 الأصدقاء</button>
-  <button onclick="go('t4', this)">💼 المحفظة</button>
+  <button type="button" class="active" onclick="go('t1', this)">🏠 الرئيسية</button>
+  <button type="button" onclick="go('t2', this)">⛏️ التعدين</button>
+  <button type="button" onclick="go('t3', this)">👥 الأصدقاء</button>
+  <button type="button" onclick="go('t4', this)">💼 المحفظة</button>
 </div>
 
 <script>
@@ -116,45 +112,64 @@
   let userId = parseInt(localStorage.getItem('rk_uid')) || Math.floor(100000 + Math.random() * 900000);
   localStorage.setItem('rk_uid', userId);
 
-  const myLink = `https://t.me{userId}`;
+  const myLink = "https://t.me_" + userId;
   document.getElementById('ref-txt').innerText = myLink;
 
   let bal = parseFloat(localStorage.getItem('rk_bal')) || 0;
   let lv = parseInt(localStorage.getItem('rk_lv')) || 1;
   let start = parseInt(localStorage.getItem('rk_start'));
-  if (!start || isNaN(start)) {
+  if (!start || isNaN(start) || start > Date.now()) {
     start = Date.now();
     localStorage.setItem('rk_start', start);
   }
   let walletAddr = localStorage.getItem('rk_w') || "";
 
-  // تشغيل العداد الفوري (6 أرقام عشرية لترى الحركة كل 100 ملي ثانية)
+  function go(id, el) {
+    document.getElementById('t1').className = 'tab';
+    document.getElementById('t2').className = 'tab';
+    document.getElementById('t3').className = 'tab';
+    document.getElementById('t4').className = 'tab';
+    document.getElementById(id).className = 'tab show';
+    var btns = document.querySelectorAll('.menu button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].className = '';
+    }
+    el.className = 'active';
+  }
+
   setInterval(function() {
-    const now = Date.now();
-    const sec = Math.max(0, (now - start) / 1000);
-    const mined = sec * ((lv * 25) / 3600);
+    var sec = Math.max(0, (Date.now() - start) / 1000);
+    var mined = sec * ((lv * 25) / 3600);
     document.getElementById('live').innerText = "+" + mined.toFixed(6);
   }, 100);
 
-  async function sbFetch(path, method = "GET", body = null) {
-    const headers = {
+  function draw() {
+    document.getElementById('bal').innerHTML = bal.toFixed(4) + ' <span style="font-size:15px; color:#a855f7;">RCKT</span>';
+    document.getElementById('spd').innerText = lv * 25;
+    document.getElementById('lv').innerText = lv;
+    document.getElementById('cost').innerText = lv * 100;
+    if (walletAddr) document.getElementById('wtxt').innerText = walletAddr;
+  }
+  draw();
+
+  async function sbFetch(path, method, body) {
+    var headers = {
       "apikey": SB_KEY,
       "Authorization": "Bearer " + SB_KEY,
       "Content-Type": "application/json",
       "Prefer": "return=representation"
     };
-    const opts = { method, headers };
+    var opts = { method: method || "GET", headers: headers };
     if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(SB_URL + "/rest/v1/" + path, opts);
+    var res = await fetch(SB_URL + "/rest/v1/" + path, opts);
     return res.json();
   }
 
   async function initUser() {
-    draw();
     try {
-      const data = await sbFetch(`users?id=eq.${userId}`);
-      if (data && data.length > 0) {
-        const u = data;
+      var data = await sbFetch("users?id=eq." + userId, "GET");
+      if (Array.isArray(data) && data.length > 0) {
+        var u = data[0];
         bal = parseFloat(u.balance) || bal;
         lv = parseInt(u.level) || lv;
         if (u.last_claim && parseInt(u.last_claim) > 0) start = parseInt(u.last_claim);
@@ -174,29 +189,3 @@
       document.getElementById('sync-status').innerText = "● متصل محلياً";
     }
   }
-
-  function draw() {
-    document.getElementById('bal').innerHTML = bal.toFixed(4) + ' <span style="font-size:15px; color:#a855f7;">RCKT</span>';
-    document.getElementById('spd').innerText = lv * 25;
-    document.getElementById('lv').innerText = lv;
-    document.getElementById('cost').innerText = lv * 100;
-    if (walletAddr) document.getElementById('wtxt').innerText = walletAddr;
-  }
-
-  async function claim() {
-    const sec = Math.max(0, (Date.now() - start) / 1000);
-    const earned = sec * ((lv * 25) / 3600);
-    if (earned < 0.00001) return;
-    bal += earned;
-    start = Date.now();
-    localStorage.setItem('rk_bal', bal);
-    localStorage.setItem('rk_start', start);
-    draw();
-    try { await sbFetch(`users?id=eq.${userId}`, "PATCH", { balance: bal, last_claim: start }); } catch(e){}
-  }
-
-  async function upgrade() {
-    const cost = lv * 100;
-    if (bal >= cost) {
-      bal -= cost;
-      lv++;
