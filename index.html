@@ -1,127 +1,243 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#070b18">
-<title>ROCKET Mining</title>
-<style>
-:root{--bg:#060b18;--panel:#0c1426;--line:#26344d;--purple:#b64cff;--cyan:#19d5ee;--gold:#ffd35b;--muted:#9aa8c1;--white:#f4f6ff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Tahoma,Arial,sans-serif}
-.app{max-width:760px;margin:auto;padding:14px 14px 100px}
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 4px 18px}
-.brand{font-size:23px;font-weight:800;letter-spacing:.3px}.brand span{color:var(--purple)}
-.pill{border:1px solid var(--line);border-radius:18px;padding:8px 12px;color:var(--muted);font-size:12px}
-.card{background:linear-gradient(145deg,#101a30,#091120);border:1px solid var(--line);border-radius:22px;padding:16px;margin:12px 0;box-shadow:0 10px 30px #0004}
-.balance{display:flex;justify-content:space-between;align-items:center}.muted{color:var(--muted);font-size:13px}.big{font-size:27px;font-weight:800;margin-top:5px}.coin{color:var(--purple);font-size:17px}
-.hero{position:relative;overflow:hidden;min-height:220px;border-color:#7550a8;background:radial-gradient(circle at 70% 35%,#5527a6 0,#17174a 30%,#091326 72%)}
-.hero:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,#a94dff66,#12cde522 45%,transparent 70%);left:-35px;top:-70px}
-.heroContent{position:relative;z-index:1}.hero h2{margin:0 0 8px;font-size:19px}.rate{font-size:12px;color:#55e6ce}.earned{font-size:34px;font-weight:900;color:#56dfff;margin:20px 0 10px}
-button{font:inherit;color:var(--white);border:0;cursor:pointer}
-.primary{width:100%;padding:14px;border-radius:14px;font-weight:800;background:linear-gradient(100deg,#a51cff,#15cce9);font-size:16px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#0a1324;border:1px solid var(--line);border-radius:17px;padding:13px;text-align:center}.stat strong{display:block;font-size:21px;color:var(--cyan);margin:8px 0 3px}.stat:nth-child(2) strong{color:var(--gold)}
-.level{display:flex;align-items:center;justify-content:space-between;gap:12px}.levelIcon{font-size:34px;color:var(--gold)}
-.progress{height:8px;background:#26334b;border-radius:10px;overflow:hidden;margin:12px 0 5px}.progress i{display:block;width:0%;height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan))}
-.sectionTitle{font-size:18px;font-weight:800;margin:22px 3px 10px}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{min-height:120px;border:1px solid #65408c;background:linear-gradient(145deg,#21143c,#0c1528);border-radius:18px;padding:15px;display:flex;flex-direction:column;justify-content:space-between}.tile:nth-child(2){border-color:#176d86;background:linear-gradient(145deg,#102c42,#0c1528)}
-.tile b{font-size:16px}.tile small{color:var(--muted);line-height:1.7}.tile button,.secondary{background:#14243c;border:1px solid #405475;border-radius:12px;padding:9px 12px;align-self:flex-start}
-.referral{background:linear-gradient(100deg,#201332,#102238);border-color:#8a6a35;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#091120f5;border-top:1px solid #26344d;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:5}
-.nav button{background:none;color:#aab6ce;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px}.nav button span{font-size:22px}.nav button.active{color:#d65cff}
-.page{display:none}.page.active{display:block}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.item{padding:14px 0;border-bottom:1px solid #243149}.item:last-child{border:0}
-.notice{font-size:12px;color:#e8c778;line-height:1.7}
-@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rocekt Mining</title>
+    <script src="https://telegram.org"></script>
+    <script src="https://unpkg.com"></script>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            background-color: #090714;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+        .scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 14px 30px 14px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .user-pill {
+            background: #16122b;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .page { display: none; }
+        .page.active { display: block; }
+        .card {
+            background: #131026;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .hero-card {
+            background: linear-gradient(145deg, #25134d, #110c24);
+            border: 1px solid #8b5cf6;
+            border-radius: 22px;
+            padding: 20px 16px;
+            text-align: center;
+            margin-bottom: 14px;
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.25);
+        }
+        .btn-main {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-main:active { transform: scale(0.97); opacity: 0.9; }
+        .btn-sec {
+            background: #1d1838;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.15);
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-sec:active { transform: scale(0.97); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; font-size: 13px; }
+        .input-wrap {
+            background: #0b0817;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .input-wrap input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            width: 60%;
+            text-align: left;
+            outline: none;
+        }
+        .badge-btn {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-bar {
+            background: #100c20;
+            border-top: 1px solid rgba(168, 85, 247, 0.3);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 4px 14px 4px;
+            flex-shrink: 0;
+            z-index: 999;
+        }
+        .nav-btn {
+            flex: 1;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+        .nav-btn.active { color: #c084fc; font-weight: bold; }
+        .nav-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+    </style>
 </head>
 <body>
-<div class="app">
-<header><div class="brand">🚀 ROCKET <span>Mining</span></div><div class="pill">TON • ROKT</div></header>
 
-<main id="home" class="page active">
-  <section class="card balance"><div><div class="muted">رصيدك التجريبي</div><div class="big"><span id="balance">0.0000</span> <span class="coin">ROKT</span></div></div><div style="font-size:32px">◉</div></section>
-  <section class="card hero">
-    <div class="heroContent">
-      <div class="row"><div><h2>⛏️ التعدين</h2><div class="rate">● يعمل الآن</div></div><div class="pill">× <span id="multiplier">1.00</span></div></div>
-      <div class="earned">+<span id="earned">0.0000</span> <span class="coin">ROKT</span></div>
-      <div class="muted" style="margin-bottom:12px">مكافآت تجريبية — لا تمثل عملات قابلة للسحب</div>
-      <button class="primary" onclick="claim()">⚡ استلم ROKT</button>
+<div class="scroll-area">
+    <div class="header">
+        <div class="user-pill">🚀 <span id="u-name">لاعب Rocekt</span></div>
+        <div style="font-weight: 900; font-size: 18px; color: #c084fc;">Rocekt</div>
     </div>
-  </section>
-  <section class="stats">
-    <div class="stat"><div class="muted">في الساعة</div><strong>25.0</strong><div class="muted">ROKT/h</div></div>
-    <div class="stat"><div class="muted">يومياً</div><strong>600</strong><div class="muted">ROKT/day</div></div>
-    <div class="stat"><div class="muted">تعزيز</div><strong>1.00×</strong><div class="muted">المضاعف</div></div>
-    <div class="stat"><div class="muted">الدوري</div><strong style="color:var(--gold)">البرونزي</strong><div class="muted">Lv.1</div></div>
-  </section>
-  <section class="card">
-    <div class="level"><div><b>المستوى التالي: 2</b><div class="muted">تقدمك نحو المستوى التالي</div></div><div class="levelIcon">♜</div></div>
-    <div class="progress"><i style="width:0%"></i></div><div class="muted">ابدأ من الصفر واجمع نقاطك للوصول إلى المستوى التالي</div>
-  </section>
-  <section class="card row"><div><b>💎 مركز المهام</b><div class="muted">أكمل المهام واكسب نقاط ROKT تجريبية</div></div><button class="secondary" onclick="showPage('tasks')">المهام ←</button></section>
-  <div class="tiles">
-    <div class="tile"><b>📦 صناديق ROKT</b><small>صناديق ومكافآت تجريبية</small><button onclick="showPage('boxes')">افتح الصناديق ←</button></div>
-    <div class="tile"><b>🔷 محطة التعدين</b><small>طور محطة التعدين وزد نقاطك</small><button onclick="showPage('station')">افتح المحطة ←</button></div>
-  </div>
-  <section class="card referral"><div><b>👥 ادعُ أصدقاءك</b><div class="muted">تابع دعواتك ومكافآتك التجريبية</div></div><button class="secondary" onclick="showPage('friends')">دعوة الآن</button></section>
-</main>
 
-<section id="mining" class="page">
-  <div class="sectionTitle">⛏️ التعدين</div>
-  <div class="card hero"><h2>ROCKET Mining</h2><div class="earned">+<span id="earned2">0.0000</span> ROKT</div><p class="muted">هذا رصيد تجريبي داخل الواجهة فقط.</p><button class="primary" onclick="claim()">استلم النقاط</button></div>
-  <div class="card"><div class="row"><b>سرعة التعدين</b><b style="color:var(--cyan)">25 ROKT/h</b></div><div class="progress"><i></i></div><div class="muted">المستوى 1 • المضاعف 1.00×</div></div>
-</section>
+    <div id="p-home" class="page active">
+        <div class="card" style="text-align: center;">
+            <div style="color: #94a3b8; font-size: 13px;">الرصيد الإجمالي</div>
+            <div style="font-size: 32px; font-weight: 900; margin-top: 6px; direction: ltr;">
+                <span id="bal-display">0.0000</span> <span style="font-size: 15px; color: #a855f7;">RCKT</span>
+            </div>
+        </div>
 
-<section id="station" class="page">
-  <div class="sectionTitle">🔷 محطة التعدين</div>
-  <div class="card"><div style="font-size:48px;text-align:center">🚀</div><h2>محطة ROCKET</h2><p class="muted">طوّر محطتك لزيادة معدل النقاط التجريبية.</p><div class="row"><span>الترقية التالية</span><b>×1.10</b></div><div class="item notice">الترقيات في هذه النسخة تجريبية ولا تخصم أموالاً.</div><button class="primary" onclick="upgrade()">ترقية تجريبية</button></div>
-</section>
+        <div class="hero-card">
+            <div style="color: #4ade80; font-size: 13px; font-weight: bold;">● التعدين السحابي نشط</div>
+            <div style="font-size: 38px; font-weight: 900; color: #38bdf8; margin: 12px 0; direction: ltr;">+<span id="live-display">0.0000</span></div>
+            <div style="color: #cbd5e1; font-size: 13px; margin-bottom: 10px;">السرعة: <span id="spd-display">25</span> RCKT / ساعة</div>
+            <button type="button" class="btn-main" onclick="doClaim()">⚡ استلام العملات (Claim)</button>
+        </div>
 
-<section id="market" class="page">
-  <div class="sectionTitle">⇄ السوق</div>
-  <div class="card"><h3>سوق ROCKET</h3><p class="notice">هذه صفحة عرض تجريبية فقط. لا يوجد شراء أو بيع أو ربط بمحفظة.</p><div class="item row"><span>ROKT</span><b>بيانات تجريبية</b></div><div class="item row"><span>الشبكة</span><b>TON</b></div></div>
-</section>
+        <div class="card">
+            <div class="row">
+                <div>
+                    <div style="font-weight: bold;">🎁 مكافأة البداية</div>
+                    <div style="font-size: 12px; color: #4ade80;">+200 RCKT مجاناً</div>
+                </div>
+                <button type="button" class="badge-btn" id="bonus-btn" onclick="doBonus()">استلم الآن</button>
+            </div>
+        </div>
+    </div>
 
-<section id="friends" class="page">
-  <div class="sectionTitle">👥 الأصدقاء والإحالات</div>
-  <div class="card"><h3>ادعُ أصدقاءك</h3><p class="muted">واجهة تجريبية لإظهار رابط الدعوة وعدد الأصدقاء.</p><div class="item row"><span>الأصدقاء المدعوون</span><b>0</b></div><button class="primary" onclick="copyInvite()">نسخ رابط الدعوة التجريبي</button></div>
-</section>
+    <div id="p-mine" class="page">
+        <div class="hero-card">
+            <div style="font-size: 18px; font-weight: bold;">⚡ ترقية سرعة التعدين</div>
+            <div style="color: #cbd5e1; font-size: 13px; margin: 8px 0;">المستوى الحالي: Lv.<span id="lv-display">1</span></div>
+            <button type="button" class="btn-main" onclick="doUpgrade()">ترقية (+25/ساعة) • التكلفة: <span id="cost-display">100</span> RCKT</button>
+        </div>
+    </div>
 
-<section id="wallet" class="page">
-  <div class="sectionTitle">👛 المحفظة</div>
-  <div class="card"><div class="muted">رصيد النقاط التجريبية</div><div class="big"><span id="walletBalance">0.0000</span> <span class="coin">ROKT</span></div><p class="notice">لا تتصل هذه الواجهة بمحفظة TON ولا تدعم الإيداع أو السحب أو التحويل.</p><div class="item row"><span>الأصل</span><b>Ton Rocket</b></div><div class="item row"><span>الرمز</span><b>ROKT</b></div><div class="item row"><span>الشبكة</span><b>TON</b></div></div>
-</section>
+    <div id="p-friends" class="page">
+        <div class="hero-card">
+            <div style="font-size: 36px; font-weight: 900; color: #fbbf24;">5%</div>
+            <div style="font-size: 14px; font-weight: bold; margin: 6px 0 14px 0;">عمولة دائمة من تعدين أصدقائك</div>
+            <div style="background: rgba(0,0,0,0.4); padding: 10px; border-radius: 10px; font-size: 11px; direction: ltr; margin-bottom: 12px; word-break: break-all;" id="ref-box">
+                https://t.me
+            </div>
+            <div class="grid-2">
+                <button type="button" class="btn-main" style="margin:0;" onclick="shareFriend()">✈️ دعوة صديق</button>
+                <button type="button" class="btn-sec" onclick="copyFriend()">📋 نسخ الرابط</button>
+            </div>
+        </div>
+    </div>
 
-<section id="tasks" class="page">
-  <div class="sectionTitle">🎯 مركز المهام</div>
-  <div class="card"><div class="item row"><div><b>زيارة صفحة المشروع</b><div class="muted">مهمة تجريبية</div></div><button class="secondary" onclick="task(this)">استلام</button></div><div class="item row"><div><b>استكشاف محطة التعدين</b><div class="muted">مهمة تجريبية</div></div><button class="secondary" onclick="task(this)">استلام</button></div><div class="item row"><div><b>زيارة قسم الأصدقاء</b><div class="muted">مهمة تجريبية</div></div><button class="secondary" onclick="task(this)">استلام</button></div></div>
-</section>
+    <div id="p-wallet" class="page">
+        <div class="hero-card">
+            <div style="font-size: 13px; color: #fbbf24; font-weight: bold;" id="w-status">● المحفظة غير متصلة</div>
+            <div style="font-size: 13px; color: #38bdf8; margin-top: 6px;">رصيد الشبكة: <span id="ton-val">0.00</span> TON</div>
+            <button type="button" class="btn-main" onclick="openTon()">💳 ربط محفظة TON</button>
+        </div>
 
-<section id="boxes" class="page">
-  <div class="sectionTitle">📦 صناديق ROKT</div>
-  <div class="card"><div style="font-size:48px;text-align:center">🎁</div><h3>الصندوق اليومي</h3><p class="muted">مكافأة نقاط تجريبية مرة واحدة في هذه الواجهة.</p><button class="primary" onclick="openBox()">افتح الصندوق</button><p id="boxResult" class="notice"></p></div>
-</section>
+        <div class="card">
+            <div style="font-weight: bold; margin-bottom: 6px;">سحب عملة RCKT</div>
+            <div class="input-wrap">
+                <button type="button" class="badge-btn" onclick="maxWithdraw()">MAX</button>
+                <input type="number" id="w-input" value="10000" oninput="calcFee()">
+                <span style="font-size: 12px; color: #94a3b8;">RCKT</span>
+            </div>
+            <div class="row"><span style="color: #94a3b8;">شرط الاحتفاظ في المحفظة (25%):</span><span style="color: #fbbf24; font-weight: bold;" id="hold-txt">2,500 RCKT</span></div>
+            <div class="row"><span style="color: #94a3b8;">رسوم السحب (5%):</span><span style="color: #f87171;" id="fee-txt">500 RCKT</span></div>
+            <div class="row" style="font-weight: bold;"><span>صافي الاستلام:</span><span style="color: #c084fc;" id="net-txt">9,500 RCKT</span></div>
+            <button type="button" class="btn-main" onclick="requestWithdraw()">تأكيد السحب</button>
+        </div>
+    </div>
 </div>
 
-<nav class="nav">
-<button class="active" data-page="home" onclick="showPage('home',this)"><span>⌂</span>الرئيسية</button>
-<button data-page="mining" onclick="showPage('mining',this)"><span>⛏</span>التعدين</button>
-<button data-page="station" onclick="showPage('station',this)"><span>⬡</span>المحطة</button>
-<button data-page="market" onclick="showPage('market',this)"><span>⇄</span>السوق</button>
-<button data-page="friends" onclick="showPage('friends',this)"><span>♧</span>الأصدقاء</button>
-<button data-page="wallet" onclick="showPage('wallet',this)"><span>▣</span>المحفظة</button>
-</nav>
+<div class="nav-bar">
+    <div class="nav-btn active" onclick="goPage('home', this)"><span class="nav-icon">🏠</span>الرئيسية</div>
+    <div class="nav-btn" onclick="goPage('mine', this)"><span class="nav-icon">⛏️</span>التعدين</div>
+    <div class="nav-btn" onclick="goPage('friends', this)"><span class="nav-icon">👥</span>الأصدقاء</div>
+    <div class="nav-btn" onclick="goPage('wallet', this)"><span class="nav-icon">💼</span>المحفظة</div>
+</div>
+
 <script>
-let balance=0, bonus=0, level=1, boxUsed=false;
-function fmt(n){return n.toLocaleString('en-US',{minimumFractionDigits:4,maximumFractionDigits:4})}
-function update(){['balance','walletBalance'].forEach(id=>document.getElementById(id).textContent=fmt(balance));['earned','earned2'].forEach(id=>document.getElementById(id).textContent=fmt(bonus))}
-function claim(){balance+=bonus;bonus=0;update();alert('تمت إضافة النقاط التجريبية إلى رصيد العرض.')}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));let b=btn||document.querySelector('[data-page="'+id+'"]');if(b)b.classList.add('active');window.scrollTo(0,0)}
-function upgrade(){if(balance<100){alert('تحتاج إلى 100 نقطة تجريبية.');return}balance-=100;level++;document.getElementById('multiplier').textContent=(1+(level-1)*.1).toFixed(2);update();alert('تمت الترقية التجريبية إلى المستوى '+level)}
-function task(btn){btn.textContent='تم';btn.disabled=true;btn.style.opacity='.5';balance+=10;update();alert('أضيفت 10 نقاط تجريبية.')}
-function openBox(){if(boxUsed){document.getElementById('boxResult').textContent='استخدمت الصندوق التجريبي بالفعل.';return}boxUsed=true;balance+=25;update();document.getElementById('boxResult').textContent='مبروك! حصلت على 25 نقطة تجريبية.'}
-function copyInvite(){alert('أضف رابط Mini App الخاص بك هنا بعد نشر المشروع.')}
-update();
-</script>
-</body>
-</html>
+    // Safe Telegram Init
+    let tg = null;
+    try {
+        if (window.Telegram && window.Telegram.WebApp) {
+            tg = window.Telegram.WebApp;
+            tg.ready();
+            tg.expand();
+        }
+    } catch (e) {}
+
+    let uid = "1001";
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        document.getElementById('u-name').innerText = tg.initDataUnsafe.user.first_name;
+        uid = tg.initDataUnsafe.user.id;
+    }
+
